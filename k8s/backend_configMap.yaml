@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend-config
+  namespace: e-commerce-web
+data:
+  DB_NAME: ecommerce_forever
+  JWT_SECRET: your_jwt_secret
+  MONGODB_URI: mongodb://admin:supersecure@mongo:27017/ecommerce_forever?authSource=admin

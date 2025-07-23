@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: admin-panel
+  namespace: e-commerce-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: admin-panel
+  template:
+    metadata:
+      labels:
+        app: admin-panel
+    spec:
+      containers:
+      - name: admin-panel
+        image: aniketsaini777/admin-panel:latest
+        ports:
+        - containerPort: 80
+        env:
+        - name: VITE_BACKEND_URL
+          value: http://backend:5000

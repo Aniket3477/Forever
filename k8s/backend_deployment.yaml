@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend
+  namespace: e-commerce-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend
+  template:
+    metadata:
+      labels:
+        app: backend
+    spec:
+      containers:
+      - name: backend
+        image: backend:v3
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 4000
+        env:
+        - name: JWT_SECRET
+          valueFrom:
+             configMapKeyRef:
+                 name: backend-config
+                 key: JWT_SECRET
+        - name: MONGODB_URI
+          valueFrom:
+             configMapKeyRef:
+                 name: backend-config
+                 key: MONGODB_URI
+        
+        - name: STRIPE_SECRET_KEY
+          valueFrom:
+             secretKeyRef:
+                 name: backend-secret
+                 key: STRIPE_SECRET_KEY         
