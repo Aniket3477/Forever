@@ -4,6 +4,6 @@ metadata:
   name: backend-config
   namespace: e-commerce-web
 data:
-  DB_NAME: ecommerce_forever
   JWT_SECRET: your_jwt_secret
-  MONGODB_URI: mongodb://admin:supersecure@mongo:27017/ecommerce_forever?authSource=admin
+  # Naye user credentials ka use karein
+  MONGODB_URI: mongodb://ecommerce_user:ecommerce_password@mongo:27017/ecommerce_forever # <-- Naye user/passwords se badlein

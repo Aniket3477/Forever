@@ -1,0 +1,41 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: forever-ecommerce-ingress
+  namespace: e-commerce-web
+  annotations:
+    # NGINX Ingress Controller के लिए path rewriting सक्षम करें
+    nginx.ingress.kubernetes.io/rewrite-target: /$2 
+    # रेगुलर एक्सप्रेशन के लिए NGINX Ingress Controller को सक्षम करें
+    nginx.ingress.kubernetes.io/use-regex: "true" 
+spec:
+  # सुनिश्चित करें कि यह आपके Ingress Controller (minikube के लिए nginx default है) से मेल खाता हो
+  ingressClassName: nginx 
+  rules:
+  - host: forever-ecommerce.local # यह hostname आप ब्राउज़र में उपयोग करेंगे
+    http:
+      paths:
+      # Backend API के लिए नियम
+      - path: /api/(.*) # "/api/" से शुरू होने वाले सभी अनुरोधों को रूट करें
+        pathType: ImplementationSpecific # रेगुलर एक्सप्रेशन के साथ उपयोग किया जाता है
+        backend:
+          service:
+            name: backend # आपके backend service का नाम
+            port:
+              number: 4000 # आपके backend service का पोर्ट
+      # Admin Panel के लिए नियम
+      - path: /admin(/|$)(.*) # "/admin" या "/admin/" से शुरू होने वाले सभी अनुरोधों को रूट करें
+        pathType: ImplementationSpecific # रेगुलर एक्सप्रेशन के साथ उपयोग किया जाता है
+        backend:
+          service:
+            name: admin-panel # आपके admin panel service का नाम
+            port:
+              number: 80 # आपके admin panel service का पोर्ट
+      # Frontend (मुख्य एप्लिकेशन) के लिए नियम
+      - path: / # डिफ़ॉल्ट पाथ जो root ("/") को मैच करता है
+        pathType: Prefix # रूट पाथ के लिए उपयोग किया जाता है
+        backend:
+          service:
+            name: frontend # आपके frontend service का नाम
+            port:
+              number: 80 # आपके frontend service का पोर्ट
